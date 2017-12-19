@@ -1,6 +1,6 @@
 # Git
 
-Simple PHP wrapper for Git.
+Simple PHP wrapper for Git, forked from sebastianbergmann/git which is no longer maintained.
 
 ## Installation
 
