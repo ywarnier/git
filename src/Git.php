@@ -25,7 +25,7 @@ class Git
     public function __construct($repositoryPath)
     {
         if (!is_dir($repositoryPath)) {
-            throw new RuntimeException(
+            throw new Exception(
                 sprintf(
                     'Directory "%s" does not exist',
                     $repositoryPath
@@ -78,7 +78,7 @@ class Git
      */
     public function getRevisions($order = 'DESC', $count = null)
     {
-        $cmd = 'git log --no-merges --date-order --format=medium';
+        $cmd = 'log --no-merges --date-order --format=medium';
         $countAndReverse = false;
         if (strcmp($order, 'DESC') !== 0) {
             // if ASC, get in chronological order
@@ -143,7 +143,7 @@ class Git
      *
      * @return string
      *
-     * @throws RuntimeException
+     * @throws Exception
      */
     protected function execute($command)
     {
@@ -156,7 +156,7 @@ class Git
         exec($command, $output, $returnValue);
 
         if ($returnValue !== 0) {
-            throw new RuntimeException(implode("\r\n", $output));
+            throw new Exception(implode("\r\n", $output));
         }
 
         return $output;
