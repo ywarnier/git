@@ -1,8 +1,8 @@
 {
-    "name": "ywarnier/git",
+    "name": "ywarnier/php-git",
     "description": "Simple wrapper for Git",
     "keywords": ["git"],
-    "homepage": "http://www.github.com/ywarnier/git",
+    "homepage": "http://www.github.com/ywarnier/php-git",
     "license": "BSD-3-Clause",
     "authors": [
         {
