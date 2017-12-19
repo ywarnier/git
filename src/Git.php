@@ -1,14 +1,15 @@
 <?php
 /*
- * This file is part of Git.
+ * This file is part of the PHP-Git lib.
  *
  * (c) Sebastian Bergmann <sebastian@phpunit.de>
+ * (c) Yannick Warnier <yannick.warnier@beeznest.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
 
-namespace SebastianBergmann\Git;
+namespace YWarnier\PHPGit;
 
 use DateTime;
 
