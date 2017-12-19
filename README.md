@@ -2,6 +2,8 @@
 
 Simple PHP wrapper for Git, forked from sebastianbergmann/git which is no longer maintained.
 
+This wrapper is mostly focused on getting logs from a Git branch, for example to prepare changelog files from commits.
+
 ## Installation
 
 You can add this library as a local, per-project dependency to your project using [Composer](https://getcomposer.org/):
