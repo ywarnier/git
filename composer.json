@@ -1,13 +1,13 @@
 {
-    "name": "sebastian/git",
+    "name": "ywarnier/git",
     "description": "Simple wrapper for Git",
     "keywords": ["git"],
-    "homepage": "http://www.github.com/sebastianbergmann/git",
+    "homepage": "http://www.github.com/ywarnier/git",
     "license": "BSD-3-Clause",
     "authors": [
         {
-            "name": "Sebastian Bergmann",
-            "email": "sebastian@phpunit.de"
+            "name": "Yannick Warnier",
+            "email": "yannick.warnier@beeznest.com"
         }
     ],
     "require": {
