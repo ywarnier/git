@@ -20,7 +20,9 @@ class Git
     private $repositoryPath;
 
     /**
+     * Constructor (checks whether the given repository directory exists)
      * @param string $repositoryPath
+     * @throws \Exception
      */
     public function __construct($repositoryPath)
     {
@@ -37,7 +39,9 @@ class Git
     }
 
     /**
+     * Checks out a specific revision
      * @param string $revision
+     * @throws Exception
      */
     public function checkout($revision)
     {
@@ -47,7 +51,9 @@ class Git
     }
 
     /**
+     * Gets a string about the current branch
      * @return string
+     * @throws Exception
      */
     public function getCurrentBranch()
     {
@@ -57,9 +63,11 @@ class Git
     }
 
     /**
+     * Gets a textual difference between two references
      * @param  string $from
      * @param  string $to
      * @return string
+     * @throws Exception
      */
     public function getDiff($from, $to)
     {
@@ -75,6 +83,7 @@ class Git
      * @param string The order in which to show logs. ASC for chronological, DESC for the opposite
      * @param int Number of registers to recover. If set with ASC, the function will get ALL commits and then drop the ones we don't want
      * @return array
+     * @throws Exception
      */
     public function getRevisions($order = 'DESC', $count = null)
     {
@@ -96,6 +105,8 @@ class Git
         $revisions = array();
         $author = '';
         $sha1 = '';
+        $date = '';
+        $message = '';
 
         for ($i = 0; $i < $numLines; $i++) {
             $tmp = explode(' ', $output[$i]);
@@ -105,30 +116,53 @@ class Git
             }
 
             if ($tmp[0] == 'commit') {
+                // Save previous commit
+                if ($i > 0) {
+                    $revisions[] = array(
+                        'author' => $author,
+                        'date' => $date,
+                        'sha1' => $sha1,
+                        'message' => substr($message, 0, -1)
+                    );
+                }
+                unset($author);
+                unset($date);
+                $message = '';
+
+                // Treat the new commit
                 $sha1 = $tmp[1];
             } elseif ($tmp[0] == 'Author:') {
                 $author = implode(' ', array_slice($tmp, 1));
             } elseif ($tmp[0] == 'Date:' && isset($author) && isset($sha1)) {
-                $revisions[] = array(
-                  'author'  => $author,
-                  'date'    => DateTime::createFromFormat(
-                      'D M j H:i:s Y O',
-                      implode(' ', array_slice($tmp, 3))
-                  ),
-                  'sha1'    => $sha1,
-                  'message' => isset($output[$i+2]) ? trim($output[$i+2]) : ''
+                $date = DateTime::createFromFormat(
+                    'D M j H:i:s Y O',
+                    implode(' ', array_slice($tmp, 3))
                 );
-
-                unset($author);
-                unset($sha1);
+            } else {
+                // In any other case, if the line is not empty, add to the
+                // current message
+                if (!empty($output[$i])) {
+                    $message .= trim($output[$i]).' ';
+                }
             }
+        }
+        if ($i > 0) {
+            // Save last commit
+            $revisions[] = array(
+                'author' => $author,
+                'date' => $date,
+                'sha1' => $sha1,
+                'message' => substr($message, 0, -1)
+            );
         }
 
         return $revisions;
     }
 
     /**
+     * Checks whether the working copy is clean
      * @return bool
+     * @throws Exception
      */
     public function isWorkingCopyClean()
     {
@@ -139,6 +173,8 @@ class Git
     }
 
     /**
+     * Executes a specific command prepared by other methods.
+     * This prepends the "git" command, so the command sent cannot contain it
      * @param string $command
      *
      * @return string
